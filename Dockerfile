@@ -37,8 +37,8 @@ RUN cd /root && git clone https://github.com/BVLC/caffe.git && cd caffe && \
 RUN apt-get update && apt-get install -y \
   build-essential \
   git \
-  libopenblas-dev \
   python-dev \
+#  libopenblas-dev \
   python-pip \
   python-nose \
   python-numpy \
@@ -93,3 +93,24 @@ ENV LUA_PATH='/root/.luarocks/share/lua/5.1/?.lua;/root/.luarocks/share/lua/5.1/
   PATH=/root/torch/install/bin:$PATH \
   LD_LIBRARY_PATH=/root/torch/install/lib:$LD_LIBRARY_PATH \
   DYLD_LIBRARY_PATH=/root/torch/install/lib:$DYLD_LIBRARY_PATH
+
+# [ IPython / Jupyter]
+
+RUN pip install \
+  pexpect \
+  simplegeneric \
+  jupyter
+
+# Cleanup
+
+# RUN apt-get clean autoclean
+# RUN apt-get autoremove -y
+# RUN rm -rf /var/lib/{apt,dpkg,cache,log}/
+
+# Config
+
+EXPOSE 8888
+ADD start.sh start.sh
+CMD ["./start.sh"]
+
+# for pycaffe & deepdream https://github.com/saturnism/deepdream-docker/blob/master/Dockerfile

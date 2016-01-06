@@ -5,20 +5,37 @@
 
 This Dockerfile attempts to host multiple machine learning tools (with a focus on Deep Learning) in one Ubuntu 14.04 image, and to provide an interface via Jupyter.
 
-- gensim
-    - word2vec example
-- sklearn
-- t-SNE visualization example
-- Torch
-    - char-rnn by Andrej Karpathy
-    - neural-style by Justin Johnson
-- Caffe
+- gensim (o)
+    - word2vec (o) example
+- sklearn (o)
+    - t-SNE (o) visualization example
+- Torch (x)
+    - char-rnn (o) by Andrej Karpathy
+    - neural-style (o) by Justin Johnson
+- Caffe (x) and pycaffe (o)
     - Deep Dream by Google
-- Chainer
-- Theano with Keras and Lasagne
-    - dcgan
-- Jupyter
+- Chainer (o)
+- Theano (x) with Keras (x) and Lasagne (x)
+    - dcgan (o)
+- Jupyter (x)
 
-Citation
---------
-This work is heavily based on  [Kaixhin](https://github.com/Kaixhin/dockerfiles/)
+## Usage
+
+First, install [Docker](http://docker.com/). Then clone this repo and run `run.sh`:
+
+```
+git clone http://github.com/kylemcdonald/ml-notebook
+cd ml-notebook && ./run.sh
+```
+
+## Next steps
+
+Once this is working by adding things manually, I would like to create a script that compiles multiple Dockerfiles into a single file with some filtering like this:
+
+```
+perl -pe 's/\s*#.+//' Dockerfile | perl -pe 's/\\\s*\n/ /' | perl -pe 's/[ \t]+/ /g' | grep 'RUN\|ENV'
+```
+
+## Acknowledgements
+
+This work is heavily based on Dockerfiles from [Kaixhin](https://github.com/Kaixhin/dockerfiles/).
