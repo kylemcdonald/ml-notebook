@@ -5,19 +5,22 @@
 
 This Dockerfile attempts to host multiple machine learning tools (with a focus on Deep Learning) in one Ubuntu 14.04 image, and to provide an interface via Jupyter.
 
-- gensim (o)
-    - word2vec (o) example
-- sklearn (o)
-    - t-SNE (o) visualization example
-- Torch (x)
+Deep Learning:
+- Torch
     - char-rnn (o) by Andrej Karpathy
     - neural-style (o) by Justin Johnson
-- Caffe (x) and pycaffe (o)
+- Caffe and pycaffe
     - Deep Dream by Google
-- Chainer (o)
-- Theano (x) with Keras (x) and Lasagne (x)
+- Theano with Keras and Lasagne
     - dcgan (o)
-- Jupyter (x)
+- Chainer
+
+General: 
+- Jupyter
+- gensim
+    - word2vec (o) example (with word2vec db)
+- sklearn
+    - t-SNE (o) visualization example
 
 ## Usage
 
@@ -27,6 +30,18 @@ First, install [Docker](http://docker.com/). Then clone this repo and run `run.s
 git clone http://github.com/kylemcdonald/ml-notebook
 cd ml-notebook && ./run.sh
 ```
+
+## Build notes
+
+The Chainer portion was based on this process:
+
+```
+$ git clone https://github.com/pfnet/chainer-test.git && cd chainer-test
+$ ./make_docker.py --base ubuntu14_py2 --numpy numpy110 --cuda none --cudnn none
+$ open -t Dockerfile
+```
+
+And removing `RUN pip install numpy==1.10.2`
 
 ## Next steps
 

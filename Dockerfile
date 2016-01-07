@@ -39,6 +39,7 @@ RUN cd /root && git clone --branch caffe-0.14 https://github.com/NVIDIA/caffe.gi
   make -j"$(nproc)"
 # Set CAFFE_HOME
 ENV CAFFE_HOME /root/caffe
+ENV PYTHONPATH /root/caffe/python:$PYTHONPATH
 
 # [ Theano ]
 
@@ -103,6 +104,28 @@ ENV LUA_PATH='/root/.luarocks/share/lua/5.1/?.lua;/root/.luarocks/share/lua/5.1/
   LD_LIBRARY_PATH=/root/torch/install/lib:$LD_LIBRARY_PATH \
   DYLD_LIBRARY_PATH=/root/torch/install/lib:$DYLD_LIBRARY_PATH
 
+# [ Chainer ]
+
+RUN apt-get install -y \
+  ccache \
+  curl \
+  g++ \
+  gfortran \
+  git \
+  libhdf5-dev
+ENV PATH /usr/lib/ccache:$PATH
+RUN apt-get install -y \
+  python-pip \
+  python-dev
+# RUN pip install numpy==1.10.2 # more recent version already installed above
+RUN pip install chainer
+
+# [ gensim, sklearn ]
+
+RUN pip install \
+  gensim \
+  sklearn
+
 # [ IPython / Jupyter]
 
 RUN pip install \
@@ -112,14 +135,5 @@ RUN pip install \
 
 # Cleanup
 
-# RUN apt-get clean autoclean
-# RUN apt-get autoremove -y
-# RUN rm -rf /var/lib/{apt,dpkg,cache,log}/
-
-# Config
-
-EXPOSE 8888
-ADD start.sh start.sh
-CMD ["./start.sh"]
-
-# for pycaffe & deepdream https://github.com/saturnism/deepdream-docker/blob/master/Dockerfile
+RUN apt-get clean autoclean
+RUN apt-get autoremove -y
