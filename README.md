@@ -46,6 +46,8 @@ And removing `RUN pip install numpy==1.10.2`
 Next steps
 ----------
 
+I'd like to use avahi-daemon to make the IP address of the host. But it seems [difficult](http://grokbase.com/t/gg/docker-user/155wz59qrn/docker-avahi-daemon-service-fails-to-start-when-running-multiple-containers-on-the-same-machine). It might make sense to add a line to the host file instead (if one doesn't already exist), but this requires a password.
+
 Once this is working by adding things manually, I would like to create a script that compiles multiple Dockerfiles into a single file with some filtering like this:
 
 ```
