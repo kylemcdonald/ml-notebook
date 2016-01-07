@@ -2,34 +2,43 @@
 FROM ubuntu:14.04
 
 # [ Caffe ]
+# From first half of https://github.com/Kaixhin/dockerfiles/blob/master/digits/Dockerfile
 
 # Install git, bc and dependencies
 RUN apt-get update && apt-get install -y \
   git \
   bc \
-  libatlas-base-dev \
-  libatlas-dev \
-  libboost-all-dev \
-  libopencv-dev \
-  libprotobuf-dev \
-  libgoogle-glog-dev \
+  cmake \
   libgflags-dev \
-  protobuf-compiler \
-  libhdf5-dev \
+  libgoogle-glog-dev \
+  libopencv-dev \
   libleveldb-dev \
+  libsnappy-dev \
   liblmdb-dev \
-  libsnappy-dev
+  libhdf5-serial-dev \
+  libprotobuf-dev \
+  protobuf-compiler \
+  libatlas-base-dev \
+  python-dev \
+  python-pip \
+  python-numpy \
+  gfortran
 
-# Clone Caffe repo and move into it
-RUN cd /root && git clone https://github.com/BVLC/caffe.git && cd caffe && \
-# Copy Makefile
-  cp Makefile.config.example Makefile.config && \
-# Enable CPU-only
-  sed -i 's/# CPU_ONLY/CPU_ONLY/g' Makefile.config && \
+# Install boost
+RUN apt-get install -y --no-install-recommends libboost-all-dev
+
+# Clone NVIDIA Caffe repo and move into it
+RUN cd /root && git clone --branch caffe-0.14 https://github.com/NVIDIA/caffe.git && cd caffe && \
+# Install python dependencies
+  cat python/requirements.txt | xargs -n1 pip install && \
+# Make and move into build directory
+  mkdir build && cd build && \
+# CMake
+  cmake .. && \
 # Make
-  make -j"$(nproc)" all
-# Set ~/caffe as working directory
-# WORKDIR /root/caffe
+  make -j"$(nproc)"
+# Set CAFFE_HOME
+ENV CAFFE_HOME /root/caffe
 
 # [ Theano ]
 
@@ -38,7 +47,7 @@ RUN apt-get update && apt-get install -y \
   build-essential \
   git \
   python-dev \
-#  libopenblas-dev \
+#  libopenblas-dev \ # this causes an error with Theano afaict
   python-pip \
   python-nose \
   python-numpy \
