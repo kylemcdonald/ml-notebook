@@ -1,6 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 ip=`docker-machine ip default`
-sleep 2 && open "http://$ip:8888/" &
+port="8888"
+
+openavailable(){
+	until nc -vz "$1" "$2" &>/dev/null; do
+		sleep 1
+	done
+	open "http://$1:$2/"
+}
+
+openavailable $ip $port &
+
 dir=`pwd`
 docker run -ti \
 	-p 8888:8888 \
