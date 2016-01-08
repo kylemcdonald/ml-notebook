@@ -21,6 +21,7 @@ openavailable $ip $jupyterport &
 dir=`pwd`
 docker run -ti \
 	-p "$jupyterport:$jupyterport" \
+	--env "HOST_IP=$ip" \
 	-w "/root/shared" \
 	--volume="$dir/shared:/root/shared" \
 	kylemcdonald/ml-notebook \
