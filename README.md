@@ -6,28 +6,30 @@ ml-notebook
 This Dockerfile attempts to host multiple machine learning tools (with a focus on Deep Learning) in one Ubuntu 14.04 image, and to provide an interface via Jupyter.
 
 Deep Learning:
-- Theano with Keras and Lasagne: dcgan (o)
-- Caffe and pycaffe: Deep Dream by Google
-- Torch: char-rnn (o) by Andrej Karpathy, neural-style (o) by Justin Johnson
+- Theano with Keras and Lasagne
+- Caffe and pycaffe
+- Torch
 - Chainer
 
 General: 
 - Jupyter
-- gensim: word2vec (o) example (with word2vec db)
-- sklearn: t-SNE (o) visualization example
+- gensim
+- sklearn
+
+For a collection of examples to use with ml-notebook, check out [ml-examples](https://github.com/kylemcdonald/ml-notebook).
 
 Usage
 -----
 
-I've only tested this on OSX. Somethign similar should work on Linux, and I'm not sure about the process for Windows.
+I've only tested this on OSX. Something similar should work on Linux, and I'm not sure about the process for Windows.
 
 1. Install [Docker](http://docker.com/).
 2. Run the "Docker Quickstart Terminal".
 3. Clone this repo and run `run.sh`.
 
 ```
-git clone http://github.com/kylemcdonald/ml-notebook
-cd ml-notebook && ./run.sh
+$ git clone https://github.com/kylemcdonald/ml-notebook.git
+$ cd ml-notebook && ./run.sh
 ```
 
 Build notes

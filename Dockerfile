@@ -1,11 +1,15 @@
 # Start with Ubuntu base image
 FROM ubuntu:14.04
 
+# Only do this once at the beginning
+
+RUN apt-get update
+
 # [ Caffe ]
 # From first half of https://github.com/Kaixhin/dockerfiles/blob/master/digits/Dockerfile
 
 # Install git, bc and dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get install -y \
   git \
   bc \
   cmake \
@@ -44,7 +48,7 @@ ENV PYTHONPATH /root/caffe/python:$PYTHONPATH
 # [ Theano ]
 
 # Install build-essential, git, python-dev, pip and other dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get install -y \
   build-essential \
   git \
   python-dev \
@@ -65,7 +69,7 @@ RUN pip install --upgrade https://github.com/Lasagne/Lasagne/archive/master.zip
 # [ Keras ]
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get install -y \
   libhdf5-dev \
   python-h5py \
   python-yaml
@@ -84,7 +88,7 @@ RUN cd /root && git clone https://github.com/fchollet/keras.git && cd keras && \
 # [ Torch ]
 
 # Install curl and dependencies for iTorch
-RUN apt-get update && apt-get install -y \
+RUN apt-get install -y \
   curl \
   ipython3 \
   python-zmq
@@ -132,6 +136,16 @@ RUN pip install \
   pexpect \
   simplegeneric \
   jupyter
+
+# [ OpenSSH ]
+
+# RUN apt-get install -y openssh-server
+# RUN mkdir /var/run/sshd && \
+#  echo "root:ml" | chpasswd && \
+#  # Allow root login with password
+#  sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+#  # Prevent user being kicked off after login
+#  sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
 
 # Cleanup
 
