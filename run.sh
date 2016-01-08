@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Start Quickstart Terminal if it's not already started.
+# if [ ! -z "$DOCKER_MACHINE" ]; then
+#	bash --login '/Applications/Docker/Docker Quickstart Terminal.app/Contents/Resources/Scripts/start.sh'
+# fi
+
 jupyterport="8888"
 ip=`docker-machine ip default`
 
