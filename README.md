@@ -24,8 +24,7 @@ Usage
 I've only tested this on OSX. Something similar should work on Linux, and I'm not sure about the process for Windows.
 
 1. Install [Docker](http://docker.com/).
-2. Run the "Docker Quickstart Terminal".
-3. Clone this repo and run `run.sh`.
+2. Clone this repo and run `run.sh`.
 
 ```
 $ git clone https://github.com/kylemcdonald/ml-notebook.git

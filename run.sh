@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-# set up docker
-# eval "$(docker-machine env --shell=bash default)"
+# make sure docker vm is running
+docker-machine start default
+
+# set up environment
+eval "$(docker-machine env --shell=bash default)"
 
 jupyterport="8888"
 ip=`docker-machine ip default`
