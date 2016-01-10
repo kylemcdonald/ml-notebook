@@ -16,7 +16,7 @@ General:
 - gensim
 - sklearn
 
-For a collection of examples to use with ml-notebook, check out [ml-examples](https://github.com/kylemcdonald/ml-notebook).
+For a collection of examples to use with ml-notebook, check out [ml-examples](https://github.com/kylemcdonald/ml-examples).
 
 Usage
 -----
