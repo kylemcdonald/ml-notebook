@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# make sure docker vm is running
-docker-machine start default
-
 # set up environment
 eval "$(docker-machine env --shell=bash default)"
 
