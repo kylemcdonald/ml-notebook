@@ -6,6 +6,7 @@ ml-notebook
 This Dockerfile attempts to host multiple machine learning tools (with a focus on Deep Learning) in one Ubuntu 14.04 image, and to provide an interface via Jupyter. It is meant to be used in combination with the [ml-examples](https://github.com/kylemcdonald/ml-examples) repository.
 
 Deep Learning:
+- TensorFlow
 - Theano with Keras and Lasagne
 - Caffe and pycaffe
 - Torch
@@ -58,6 +59,8 @@ $ open -t Dockerfile
 ```
 
 And removing `RUN pip install numpy==1.10.2`
+
+The TensorFlow portion was based on the official [TensorFlow Dockerfile](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/docker/Dockerfile).
 
 Next steps
 ----------

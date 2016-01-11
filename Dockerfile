@@ -130,6 +130,21 @@ RUN pip install \
   gensim \
   sklearn
 
+# [ TensorFlow ]
+
+RUN apt-get update && apt-get install -y \
+  curl \
+  libfreetype6-dev \
+  libpng12-dev \
+  libzmq3-dev \
+  pkg-config \
+  python-numpy \
+  python-pip \
+  python-scipy
+
+RUN pip install \
+  https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.6.0-cp27-none-linux_x86_64.whl
+
 # [ IPython / Jupyter]
 
 RUN pip install \
@@ -137,17 +152,8 @@ RUN pip install \
   simplegeneric \
   jupyter
 
-# [ OpenSSH ]
-
-# RUN apt-get install -y openssh-server
-# RUN mkdir /var/run/sshd && \
-#  echo "root:ml" | chpasswd && \
-#  # Allow root login with password
-#  sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-#  # Prevent user being kicked off after login
-#  sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
-
 # Cleanup
 
 RUN apt-get clean autoclean
 RUN apt-get autoremove -y
+RUN rm -rf /var/lib/apt/lists/*
