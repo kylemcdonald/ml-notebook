@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-# set up environment
-eval "$(docker-machine env --shell=bash default)"
+source start-docker.sh
 
-jupyterport="8888"
-ip=`docker-machine ip default`
+VM="default"
+IMAGE="kylemcdonald/ml-notebook"
+JUPYTER_PORT="8888"
+HOST_IP=`docker-machine ip $VM`
 
 openavailable(){
 	# echo "Opening http://$1:$2/ once it is available..."
@@ -17,19 +18,19 @@ openavailable(){
 	open "http://$1:$2/"
 }
 
-openavailable $ip $jupyterport &
+openavailable $HOST_IP $JUPYTER_PORT &
 
-dir=`pwd`
+DIR=`pwd`
 docker run -ti \
 	--rm=true \
 	--name="ml-notebook" \
-	--publish="$jupyterport:$jupyterport" \
-	--env "HOST_IP=$ip" \
+	--publish="$JUPYTER_PORT:$JUPYTER_PORT" \
+	--env "HOST_IP=$HOST_IP" \
 	--workdir="/root/shared" \
 	--volume="$dir/shared:/root/shared" \
-	kylemcdonald/ml-notebook \
+	$IMAGE \
 	/bin/bash -c " \
 		sudo ln /dev/null /dev/raw1394 ; \
 		jupyter notebook --ip='*' --no-browser > jupyter.log 2>&1 & \
-		echo 'Jupyter is at http://$ip:$jupyterport/ and writing to jupyter.log' ; \
+		echo 'Jupyter is at http://$HOST_IP:$JUPYTER_PORT/ and writing to jupyter.log' ; \
 		bash"
