@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 IMAGE="kylemcdonald/ml-notebook"
 IMAGE_FILE="ml-notebook.tar"
 VM="default"
@@ -37,7 +38,7 @@ docker run -ti \
 	--publish="$JUPYTER_PORT:$JUPYTER_PORT" \
 	--env "HOST_IP=$HOST_IP" \
 	--workdir="/root/shared" \
-	--volume="$dir/shared:/root/shared" \
+	--volume="$DIR/shared:/root/shared" \
 	$IMAGE \
 	/bin/bash -c " \
 		sudo ln /dev/null /dev/raw1394 ; \
