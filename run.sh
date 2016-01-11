@@ -1,20 +1,30 @@
 #!/usr/bin/env bash
+IMAGE="kylemcdonald/ml-notebook"
+IMAGE_FILE="ml-notebook.tar"
+VM="default"
+JUPYTER_PORT="8888"
 
 source start-docker.sh
 
-VM="default"
-IMAGE="kylemcdonald/ml-notebook"
-JUPYTER_PORT="8888"
+if ! ( docker images | grep "$IMAGE" &>/dev/null ) ; then
+	if [ -e $IMAGE_FILE ]; then
+		echo "The image will be loaded from $IMAGE_FILE (first time only, ~1 minute)."
+		docker load < $IMAGE_FILE
+	else
+		echo "The image will be downloaded from docker (first time only)."
+	fi
+fi
+
 HOST_IP=`docker-machine ip $VM`
 
-openavailable(){
+openavailable() {
 	# echo "Opening http://$1:$2/ once it is available..."
 	# wait for nc to connect to the port
 	# todo: windows?
 	until nc -vz "$1" "$2" &>/dev/null; do
 		sleep 1
 	done
-	# todo: windows and linux
+	# todo: windows and linux?
 	open "http://$1:$2/"
 }
 
