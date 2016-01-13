@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-IMAGE="kylemcdonald/ml-notebook"
-IMAGE_FILE="ml-notebook.tar"
+CONTAINER="ml-notebook"
+IMAGE="kylemcdonald/$CONTAINER"
+IMAGE_FILE="$CONTAINER.tar"
 VM="default"
 JUPYTER_PORT="8888"
 
@@ -17,6 +18,16 @@ if ! ( docker images | grep "$IMAGE" &>/dev/null ) ; then
 fi
 
 HOST_IP=`docker-machine ip $VM`
+
+# this might be better as an ssh followed by a deletion on exit
+if ( docker stats --no-stream=true $CONTAINER &>/dev/null ) ; then
+	echo "The container is already running, stopping it..."
+	docker stop $CONTAINER &>/dev/null
+	if ( docker stats --no-stream=true $CONTAINER &>/dev/null ) ; then
+		echo "The container still exists, removing it..."
+		docker rm $CONTAINER &>/dev/null
+	fi
+fi
 
 openavailable() {
 	# echo "Opening http://$1:$2/ once it is available..."
@@ -34,7 +45,7 @@ openavailable $HOST_IP $JUPYTER_PORT &
 DIR=`pwd`
 docker run -ti \
 	--rm=true \
-	--name="ml-notebook" \
+	--name="$CONTAINER" \
 	--publish="$JUPYTER_PORT:$JUPYTER_PORT" \
 	--env "HOST_IP=$HOST_IP" \
 	--workdir="/root/shared" \
