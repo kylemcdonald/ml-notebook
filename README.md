@@ -5,17 +5,26 @@ ml-notebook
 
 This Dockerfile attempts to host multiple machine learning tools (with a focus on Deep Learning) in one Ubuntu 14.04 image, and to provide an interface via Jupyter. It is meant to be used in combination with the [ml-examples](https://github.com/kylemcdonald/ml-examples) repository.
 
-Deep Learning:
-- TensorFlow
-- Theano with Keras and Lasagne
-- Caffe and pycaffe
-- Torch
-- Chainer
+General:
+- [matplotlib](http://matplotlib.org/)*
+- [scipy](http://www.scipy.org/)*
+- [numpy](http://www.numpy.org/)*
+- [Jupyter](http://jupyter.org/)
 
-General: 
-- Jupyter
-- gensim
-- sklearn
+Machine Learning:
+- [gensim](https://radimrehurek.com/gensim/)
+- [scikit-learn](http://scikit-learn.org/stable/)
+- [scipy](http://www.scipy.org/)*
+- [pandas](http://pandas.pydata.org/)*
+
+Deep Learning:
+- [Caffe](http://caffe.berkeleyvision.org/) (with pycaffe)
+- [Chainer](http://chainer.org/)
+- [TensorFlow](http://tensorflow.org)
+- [Theano](http://deeplearning.net/software/theano/) (with [Keras](http://keras.io/) and [Lasagne](https://github.com/Lasagne/Lasagne))
+- [Torch](http://torch.ch/)
+
+*These are requirements of other libraries, but also interesting in their own right.
 
 Usage
 -----
