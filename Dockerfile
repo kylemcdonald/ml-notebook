@@ -152,6 +152,11 @@ RUN pip install \
   simplegeneric \
   jupyter
 
+# [ pyOSC ]
+
+# the version on pip is older than this version on GitHub
+RUN pip install git+git://github.com/ptone/pyosc.git
+
 # Cleanup
 
 RUN apt-get clean autoclean

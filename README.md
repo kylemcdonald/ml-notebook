@@ -11,6 +11,7 @@ General:
 - [matplotlib](http://matplotlib.org/)*
 - [scipy](http://www.scipy.org/)*
 - [numpy](http://www.numpy.org/)*
+- [pyOSC](https://github.com/ptone/pyosc/blob/master/OSC.py)
 - [Jupyter](http://jupyter.org/)
 
 Machine Learning:
