@@ -3,7 +3,9 @@
 ml-notebook
 ===========
 
-This Dockerfile attempts to host multiple machine learning tools (with a focus on Deep Learning) in one Ubuntu 14.04 image, and to provide an interface via Jupyter. It is meant to be used in combination with the [ml-examples](https://github.com/kylemcdonald/ml-examples) repository.
+This project is aimed at providing an accessible and reproducible environment for a variety of machine learning toolkits, with a focus on deep learning toolkits. Instead of asking you to follow a set of complex setup instructions, ml-notebook asks you to wait while a tested, pre-built image is installed.
+
+The following tools are available inside the Ubuntu 14.04 image, with Jupyter as an interface:
 
 General:
 - [matplotlib](http://matplotlib.org/)*
@@ -31,13 +33,20 @@ Usage
 
 This is only tested this on OSX. Something similar should work on Linux, and possibly Windows.
 
-1. Install [Docker](http://docker.com/).
-2. Clone this repo and run `run.sh`.
+1. Install [Docker](https://www.docker.com/docker-toolbox/).
+2. Clone this repository.
+3. (Optional) Run `./update.sh` __Notice__: this downloads almost 2GB of data and examples. If you just want to look around, browse [ml-examples](https://github.com/kylemcdonald/ml-examples).
+4. Run `./run.sh` __Notice__: this downloads another 2GB of data, a pre-built image from Docker.
+
+After installing Docker, steps 2-4 look like this:
 
 ```
-$ git clone https://github.com/kylemcdonald/ml-notebook.git
-$ cd ml-notebook && ./run.sh
+$ git clone https://github.com/kylemcdonald/ml-notebook.git && cd ml-notebook
+$ ./update.sh
+$ ./run.sh
 ```
+
+Type `ctrl+d` to exit ml-notebook. If you accidentally close the Terminal, the Jupyter notebook will keep running in the background. Whenever you want to run the environment again, just call `./run.sh`. Calling `./run.sh` when ml-notebook is running in the background will restart ml-notebook.
 
 Adding more memory or CPUs
 --------------------------
@@ -67,22 +76,11 @@ $ ./make_docker.py --base ubuntu14_py2 --numpy numpy110 --cuda none --cudnn none
 $ open -t Dockerfile
 ```
 
-And removing `RUN pip install numpy==1.10.2`
+And removing `RUN pip install numpy==1.10.2`.
 
 The TensorFlow portion was based on the official [TensorFlow Dockerfile](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/docker/Dockerfile).
-
-Next steps
-----------
-
-It would be interesting to use `avahi-daemon` to identify the IP address of the host automatically. But it seems [difficult](http://grokbase.com/t/gg/docker-user/155wz59qrn/docker-avahi-daemon-service-fails-to-start-when-running-multiple-containers-on-the-same-machine). Instead you should find the host name with `docker-machine ip default`.
-
-Once this is working by adding things manually, I would like to create a script that compiles multiple Dockerfiles into a single file with some filtering like this:
-
-```
-perl -pe 's/\s*#.+//' Dockerfile | perl -pe 's/\\\s*\n/ /' | perl -pe 's/[ \t]+/ /g' | grep 'RUN\|ENV'
-```
 
 Acknowledgements
 ----------------
 
-This work is heavily based on Dockerfiles from [Kaixhin](https://github.com/Kaixhin/dockerfiles/).
+Most of the deep learning toolkits are installed based on Dockerfiles from [Kaixhin](https://github.com/Kaixhin/dockerfiles/).
