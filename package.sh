@@ -13,4 +13,9 @@ echo "$IMAGE_FILE is ready, zipping everything..."
 
 rm shared/jupyter.log
 
-zip -q -r ../ml-notebook.zip ./
+HASH=`git rev-parse HEAD | cut -c-8`
+ZIPFILE="../ml-notebook-$HASH.zip"
+
+zip -q -r ZIPFILE ./
+
+echo "Package is ready: $ZIPFILE"
