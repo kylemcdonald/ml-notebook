@@ -11,4 +11,6 @@ if [ ! -e $IMAGE_FILE ] ; then
 fi
 echo "$IMAGE_FILE is ready, zipping everything..."
 
+rm shared/jupyter.log
+
 zip -q -r ../ml-notebook.zip ./

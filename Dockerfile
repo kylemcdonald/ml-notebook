@@ -152,6 +152,10 @@ RUN pip install \
   simplegeneric \
   jupyter
 
+# [ Prepare the matplotlib font cache ]
+
+# RUN python -c "import matplotlib.pyplot"
+
 # [ pyOSC ]
 
 # the version on pip is older than this version on GitHub
