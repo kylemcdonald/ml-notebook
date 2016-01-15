@@ -14,13 +14,13 @@ if [ ! -d ml-examples ] ; then
 fi
 cd ml-examples
 ./setup.sh
-cd -
+cd - &>/dev/null
 
 if [ ! -d ml-examples-oF ] ; then
 	git clone https://github.com/yusuketomoto/ml-examples-oF.git
 fi
 cd ml-examples-oF
 ./setup.sh
-cd -
+cd - &>/dev/null
 
 cd ../..
