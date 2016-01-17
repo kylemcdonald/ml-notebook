@@ -108,6 +108,8 @@ ENV LUA_PATH='/root/.luarocks/share/lua/5.1/?.lua;/root/.luarocks/share/lua/5.1/
   LD_LIBRARY_PATH=/root/torch/install/lib:$LD_LIBRARY_PATH \
   DYLD_LIBRARY_PATH=/root/torch/install/lib:$DYLD_LIBRARY_PATH
 
+RUN luarocks install loadcaffe
+
 # [ Chainer ]
 
 RUN apt-get install -y \
