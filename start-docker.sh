@@ -3,6 +3,14 @@
 # this script is a simplified version of:
 # /Applications/Docker/Docker Quickstart Terminal.app/Contents/Resources/Scripts/start.sh
 
+docker ps &> /dev/null
+DOCKER_RUNNING_CODE=$?
+
+if [ $DOCKER_RUNNING_CODE -eq 0 ]; then
+    echo "Docker already running."
+    return
+fi
+
 VM=default
 DOCKER_MACHINE=/usr/local/bin/docker-machine
 VBOXMANAGE=/Applications/VirtualBox.app/Contents/MacOS/VBoxManage
