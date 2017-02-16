@@ -3,24 +3,29 @@
 CONTAINER="ml-notebook"
 IMAGE="kylemcdonald/$CONTAINER"
 IMAGE_FILE="$CONTAINER.tar"
-VM="default"
 JUPYTER_PORT="8888"
+HOST_IP="localhost"
 
-source start-docker.sh
+# check if docker is running
+docker ps &> /dev/null
+DOCKER_RUNNING_CODE=$?
+if [ $DOCKER_RUNNING_CODE -ne 0 ]; then
+	echo "Docker is not running. Start Docker first."
+	exit
+fi
 
+# download the image if necessary
 if ! ( docker images | grep "$IMAGE" &>/dev/null ) ; then
 	if [ -e $IMAGE_FILE ]; then
 		echo "The image will be loaded from $IMAGE_FILE (first time only, ~1 minute)."
 		docker load < $IMAGE_FILE
 	else
-		echo "The image will be downloaded from docker (first time only)."
+		echo "The image will be downloaded from docker (first time only, a few minutes)."
 	fi
 fi
 
-HOST_IP=`docker-machine ip $VM`
-
-# this might be better as an ssh followed by a deletion on exit
-if ( docker stats --no-stream=true $CONTAINER &>/dev/null ) ; then
+# if the container wasn't automatically removed last time, remove it
+if ( docker stats --no-stream $CONTAINER &>/dev/null ) ; then
 	echo "The container is already running, stopping it..."
 	docker stop $CONTAINER &>/dev/null
 	if ( docker stats --no-stream=true $CONTAINER &>/dev/null ) ; then
@@ -30,29 +35,39 @@ if ( docker stats --no-stream=true $CONTAINER &>/dev/null ) ; then
 fi
 
 openavailable() {
-	# echo "Opening http://$1:$2/ once it is available..."
-	# wait for nc to connect to the port
-	# todo: windows?
-	until nc -vz "$1" "$2" &>/dev/null; do
+	# wait up to 10 seconds for jupyter to start
+	# this way this loop doesn't run indefinitely
+	for i in `seq 1 10`; do
+		if [ -e "shared/jupyter.log" ]; then
+			JUPYTER_URL=`grep -Eoh "http://$1.+" shared/jupyter.log`
+			if [ -n "$JUPYTER_URL" ]; then
+				open "$JUPYTER_URL"
+				exit
+			fi
+		fi
 		sleep 1
 	done
-	# todo: windows and linux?
-	open "http://$1:$2/"
 }
 
-openavailable $HOST_IP $JUPYTER_PORT &
+# remove the old logfile if it exists
+[ -e "shared/jupyter.log" ] && rm "shared/jupyter.log"
 
+# open the browser once the log file has the token
+openavailable $HOST_IP &
+
+# run docker
 DIR=`pwd`
 docker run -ti \
-	--rm=true \
-	--name="$CONTAINER" \
-	--publish="$JUPYTER_PORT:$JUPYTER_PORT" \
+	--rm \
+	--name "$CONTAINER" \
+	--publish "$JUPYTER_PORT:$JUPYTER_PORT" \
 	--env "HOST_IP=$HOST_IP" \
-	--workdir="/root/shared" \
-	--volume="$DIR/shared:/root/shared" \
+	--workdir "/root/shared" \
+	--volume "$DIR/shared:/root/shared" \
 	$IMAGE \
 	/bin/bash -c " \
-		sudo ln /dev/null /dev/raw1394 ; \
-		jupyter notebook --ip='*' --no-browser > jupyter.log 2>&1 & \
-		echo 'Jupyter is at http://$HOST_IP:$JUPYTER_PORT/ and writing to jupyter.log' ; \
+		jupyter notebook --ip='*' >jupyter.log 2>&1 & sleep 1 ; \
+		echo 'Jupyter is writing to jupyter.log and running at:' ; \
+		grep 'http://$HOST_IP' jupyter.log ; \
+		echo 'To quit type \"exit\" or Control-D.' ; \
 		bash"
