@@ -1,11 +1,49 @@
-# start from tensorflow base image
-FROM gcr.io/tensorflow/tensorflow
+FROM ubuntu:14.04
 
 RUN apt-get update
 
+# [ tensorflow ]
+# https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/docker/Dockerfile
+
+RUN apt-get install -y --no-install-recommends \
+  build-essential \
+  curl \
+  libfreetype6-dev \
+  libpng12-dev \
+  libzmq3-dev \
+  pkg-config \
+  python \
+  python-dev \
+  rsync \
+  software-properties-common \
+  unzip
+
+RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
+  python get-pip.py && \
+  rm get-pip.py
+
+RUN pip --no-cache-dir install \
+  ipykernel \
+  jupyter \
+  matplotlib \
+  numpy \
+  scipy \
+  sklearn \
+  pandas \
+  Pillow \
+  tensorflow
+
+RUN python -m ipykernel.kernelspec
+
+# TensorBoard
+EXPOSE 6006
+
+# IPython
+EXPOSE 8888
+
 # [ pandas ]
 
-RUN pip install pandas
+RUN pip --no-cache-dir install pandas
 
 # [ keras + theano ]
 # https://github.com/fchollet/keras/blob/master/docker/Dockerfile
@@ -17,12 +55,12 @@ RUN apt-get install -y \
   g++ \
   graphviz > /dev/null
 
-RUN pip install h5py
-RUN pip install git+git://github.com/fchollet/keras.git
+RUN pip --no-cache-dir install h5py
+RUN pip --no-cache-dir install git+git://github.com/fchollet/keras.git
 
 # [ gensim ]
 
-RUN pip install gensim
+RUN pip --no-cache-dir install gensim
 
 # [ torch ]
 # https://github.com/Kaixhin/dockerfiles/blob/master/torch/Dockerfile
@@ -51,10 +89,10 @@ ENV LUA_CPATH='/root/torch/install/lib/?.so;'$LUA_CPATH
 
 # [ pyOSC ]
 
-# the version on pip is older than this version on GitHub
-RUN pip install git+git://github.com/ptone/pyosc.git
+# this version is more up to date than pip
+RUN pip --no-cache-dir install git+git://github.com/ptone/pyosc.git
 
-# [ Cleanup ]
+# [ cleanup ]
 # Only run this once at the end.
 
 RUN apt-get clean autoclean && \
