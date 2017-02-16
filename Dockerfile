@@ -1,39 +1,40 @@
 FROM ubuntu:14.04
 
-RUN apt-get update
-
 # [ tensorflow ]
 # https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/docker/Dockerfile
 
-RUN apt-get install -y --no-install-recommends \
-  build-essential \
-  curl \
-  libfreetype6-dev \
-  libpng12-dev \
-  libzmq3-dev \
-  pkg-config \
-  python \
-  python-dev \
-  rsync \
-  software-properties-common \
-  unzip
+RUN apt-get update; \
+  apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    libfreetype6-dev \
+    libpng12-dev \
+    libzmq3-dev \
+    pkg-config \
+    python \
+    python-dev \
+    rsync \
+    software-properties-common \
+    unzip; \
+  apt-get clean autoclean; \
+  apt-get autoremove -y; \
+  rm -rf /var/lib/apt/lists/*
 
-RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
-  python get-pip.py && \
+RUN curl -O https://bootstrap.pypa.io/get-pip.py; \
+  python get-pip.py; \
   rm get-pip.py
 
 RUN pip --no-cache-dir install \
-  ipykernel \
-  jupyter \
-  matplotlib \
-  numpy \
-  scipy \
-  sklearn \
-  pandas \
-  Pillow \
-  tensorflow
-
-RUN python -m ipykernel.kernelspec
+    ipykernel \
+    jupyter \
+    matplotlib \
+    numpy \
+    scipy \
+    sklearn \
+    pandas \
+    Pillow \
+    tensorflow; \
+  python -m ipykernel.kernelspec
 
 # TensorBoard
 EXPOSE 6006
@@ -48,15 +49,18 @@ RUN pip --no-cache-dir install pandas
 # [ keras + theano ]
 # https://github.com/fchollet/keras/blob/master/docker/Dockerfile
 
-RUN apt-get install -y \
-  wget \
-  git \
-  libhdf5-dev \
-  g++ \
-  graphviz > /dev/null
+RUN apt-get update; \
+  apt-get install -y \
+    wget \
+    git \
+    libhdf5-dev \
+    g++ \
+    graphviz; \
+  apt-get clean autoclean; \
+  apt-get autoremove -y; \
+  rm -rf /var/lib/apt/lists/*
 
-RUN pip --no-cache-dir install h5py
-RUN pip --no-cache-dir install git+git://github.com/fchollet/keras.git
+RUN pip --no-cache-dir install h5py git+git://github.com/fchollet/keras.git
 
 # [ gensim ]
 
@@ -66,19 +70,21 @@ RUN pip --no-cache-dir install gensim
 # https://github.com/Kaixhin/dockerfiles/blob/master/torch/Dockerfile
 
 # Install git, apt-add-repository and dependencies for iTorch
-RUN apt-get install -y \
-  git \
-  software-properties-common \
-  ipython3 \
-  libssl-dev \
-  libzmq3-dev \
-  python-zmq \
-  python-pip > /dev/null
+RUN apt-get update; \
+  apt-get install -y \
+    git \
+    software-properties-common \
+    ipython3 \
+    libssl-dev \
+    libzmq3-dev \
+    python-zmq \
+    python-pip; \
+  apt-get clean autoclean; \
+  apt-get autoremove -y; \
+  rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/torch/distro.git /root/torch --recursive && \
-  cd /root/torch && \
-  bash install-deps > /dev/null && \
-  ./install.sh -b > /dev/null
+RUN git clone https://github.com/torch/distro.git /root/torch --recursive; \
+  cd /root/torch; bash install-deps; ./install.sh -b
 
 ENV LUA_PATH='/root/.luarocks/share/lua/5.1/?.lua;/root/.luarocks/share/lua/5.1/?/init.lua;/root/torch/install/share/lua/5.1/?.lua;/root/torch/install/share/lua/5.1/?/init.lua;./?.lua;/root/torch/install/share/luajit-2.1.0-beta1/?.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua'
 ENV LUA_CPATH='/root/.luarocks/lib/lua/5.1/?.so;/root/torch/install/lib/lua/5.1/?.so;./?.so;/usr/local/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/loadall.so'
@@ -92,9 +98,18 @@ ENV LUA_CPATH='/root/torch/install/lib/?.so;'$LUA_CPATH
 # this version is more up to date than pip
 RUN pip --no-cache-dir install git+git://github.com/ptone/pyosc.git
 
-# [ cleanup ]
-# Only run this once at the end.
+# [ dlib ]
 
-RUN apt-get clean autoclean && \
-  apt-get autoremove -y && \
+RUN apt-get update; \
+  apt-get install -y \
+    libopenblas-dev \
+    libboost-python-dev \
+    liblapack-dev; \
+  git clone https://github.com/davisking/dlib.git /root/dlib; \
+  cd /root/dlib; mkdir build; cd build; cmake ..; cmake --build .; \
+  cd /root/dlib; python setup.py install; rm -rf build; \
+  apt-get clean autoclean; \
+  apt-get autoremove -y; \
   rm -rf /var/lib/apt/lists/*
+
+RUN apt-get clean autoclean; apt-get autoremove -y; rm -rf /var/lib/apt/lists/*
