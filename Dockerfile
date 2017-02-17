@@ -112,4 +112,7 @@ RUN apt-get update; \
   apt-get autoremove -y; \
   rm -rf /var/lib/apt/lists/*
 
+RUN pip --no-cache-dir install \
+    scikit-image
+
 RUN apt-get clean autoclean; apt-get autoremove -y; rm -rf /var/lib/apt/lists/*
