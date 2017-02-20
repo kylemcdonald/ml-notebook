@@ -117,6 +117,14 @@ RUN apt-get update; \
   apt-get autoremove -y; \
   rm -rf /var/lib/apt/lists/*
 
+# [ Multicore-TSNE ]
+
+RUN git clone https://github.com/DmitryUlyanov/Multicore-TSNE.git ; \
+  cd Multicore-TSNE ; \
+  pip --no-cache-dir install -r requirements.txt ; \
+  python setup.py install ;
+  cd .. ; rm -rf Multicore-TSNE
+
 RUN pip --no-cache-dir install \
     scikit-image
 
