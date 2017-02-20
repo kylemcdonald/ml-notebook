@@ -128,4 +128,10 @@ RUN git clone https://github.com/DmitryUlyanov/Multicore-TSNE.git ; \
 RUN pip --no-cache-dir install \
     scikit-image
 
+# [ lapjv ]
+
+RUN pip --no-cache-dir install \
+  cython \
+  git+git://github.com/gatagat/lapjv.git
+
 RUN apt-get clean autoclean; apt-get autoremove -y; rm -rf /var/lib/apt/lists/*
