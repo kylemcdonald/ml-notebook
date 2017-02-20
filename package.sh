@@ -1,20 +1,10 @@
 #!/usr/bin/env bash
 
-# check if docker is running
-checkdocker() {
-	docker ps &> /dev/null
-	DOCKER_RUNNING_CODE=$?
-	if [ $DOCKER_RUNNING_CODE -ne 0 ]; then
-		echo "Docker is not running. Start Docker first."
-		exit
-	fi
-}
+
+source utils.sh
 
 checkdocker
-
-IMAGE="kylemcdonald/ml-notebook"
-IMAGE_FILE="ml-notebook.tar"
-LOG_FILE="shared/jupyter.log"
+checkimage $IMAGE $IMAGE_FILE
 
 # source update.sh
 
@@ -29,8 +19,8 @@ if [ ! -e $LOG_FILE ] ; then
 fi
 
 HASH=`git rev-parse HEAD | cut -c-8`
-ZIPFILE="../ml-notebook-$HASH.zip"
+ZIP_FILE="../ml-notebook-$HASH.zip"
 
-zip -q -r "$ZIPFILE" ./
+zip -q -r "$ZIP_FILE" ./
 
 echo "Package is ready: $ZIPFILE"

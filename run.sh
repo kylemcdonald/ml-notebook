@@ -1,28 +1,6 @@
 #!/usr/bin/env bash
 
-# check if docker is running
-checkdocker() {
-	docker ps &> /dev/null
-	DOCKER_RUNNING_CODE=$?
-	if [ $DOCKER_RUNNING_CODE -ne 0 ]; then
-		echo "Docker is not running. Start Docker first."
-		exit
-	fi
-}
-
-# download the image if necessary
-checkimage() {
-	IMAGE=$1
-	IMAGE_FILE=$2
-	if ! ( docker images | grep "$IMAGE" &>/dev/null ) ; then
-		if [ -e $IMAGE_FILE ]; then
-			echo "The image will be loaded from $IMAGE_FILE (first time only, ~1 minute)."
-			docker load < $IMAGE_FILE
-		else
-			echo "The image will be downloaded from docker (first time only, a few minutes)."
-		fi
-	fi
-}
+source utils.sh
 
 # if the container wasn't automatically removed last time, remove it
 checkcontainer() {
@@ -40,13 +18,14 @@ checkcontainer() {
 # open the browser once the log file has the token
 openavailable() {
 	HOST_IP=$1
+	LOG_FILE=$2
 	# remove the old log file if it exists
-	[ -e "shared/jupyter.log" ] && rm "shared/jupyter.log"
+	[ -e $LOG_FILE ] && rm $LOG_FILE
 	# wait up to 10 seconds for jupyter to start
 	# this way this loop doesn't run indefinitely
 	for i in `seq 1 10`; do
-		if [ -e "shared/jupyter.log" ]; then
-			JUPYTER_URL=`grep -Eoh "http://$HOST_IP.+" shared/jupyter.log`
+		if [ -e $LOG_FILE ]; then
+			JUPYTER_URL=`grep -Eoh "http://$HOST_IP.+" $LOG_FILE`
 			if [ -n "$JUPYTER_URL" ]; then
 				open "$JUPYTER_URL"
 				exit
@@ -78,14 +57,11 @@ runcontainer() {
 			bash"
 }
 
-CONTAINER="ml-notebook"
-IMAGE="kylemcdonald/$CONTAINER"
-IMAGE_FILE="$CONTAINER.tar"
 JUPYTER_PORT="8888"
 HOST_IP="localhost"
 
 checkdocker
 checkimage $IMAGE $IMAGE_FILE
 checkcontainer $CONTAINER
-openavailable $HOST_IP &
+openavailable $HOST_IP $LOG_FILE &
 runcontainer $CONTAINER $HOST_IP $JUPYTER_PORT

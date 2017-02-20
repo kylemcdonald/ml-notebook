@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
+source utils.sh
+
+checkdocker
+checkimage $IMAGE $IMAGE_FILE
+
+docker pull kylemcdonald/ml-notebook
+
 git pull origin master
-
-source start-docker.sh
-
-if ! ( docker images | grep "$IMAGE" &>/dev/null ) ; then
-	docker pull $IMAGE
-fi
 
 # into shared
 cd shared
