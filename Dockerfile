@@ -93,6 +93,10 @@ ENV LD_LIBRARY_PATH=/root/torch/install/lib:$LD_LIBRARY_PATH
 ENV DYLD_LIBRARY_PATH=/root/torch/install/lib:$DYLD_LIBRARY_PATH
 ENV LUA_CPATH='/root/torch/install/lib/?.so;'$LUA_CPATH
 
+RUN git clone https://github.com/facebook/iTorch.git ; \
+  cd iTorch ; luarocks make ; \
+  cd .. ; rm -rf iTorch
+
 # [ pyOSC ]
 
 # this version is more up to date than pip
@@ -107,7 +111,8 @@ RUN apt-get update; \
     liblapack-dev; \
   git clone https://github.com/davisking/dlib.git /root/dlib; \
   cd /root/dlib; mkdir build; cd build; cmake ..; cmake --build .; \
-  cd /root/dlib; python setup.py install; rm -rf build; \
+  cd /root/dlib; python setup.py install; \
+  cd /root ; rm -rf dlib; \
   apt-get clean autoclean; \
   apt-get autoremove -y; \
   rm -rf /var/lib/apt/lists/*
