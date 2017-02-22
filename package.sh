@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 
-
 source utils.sh
 
 checkdocker
 checkimage $IMAGE $IMAGE_FILE
-
-# source update.sh
 
 if [ ! -e $IMAGE_FILE ] ; then
 	echo "Saving $IMAGE to $IMAGE_FILE"
@@ -21,6 +18,6 @@ fi
 HASH=`git rev-parse HEAD | cut -c-8`
 ZIP_FILE="../ml-notebook-$HASH.zip"
 
-zip -q -r "$ZIP_FILE" ./
+tar cf -q "$ZIP_FILE" ./
 
-echo "Package is ready: $ZIPFILE"
+echo "Package is ready: $ZIP_FILE"

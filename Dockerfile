@@ -134,4 +134,12 @@ RUN pip --no-cache-dir install \
   cython \
   git+git://github.com/gatagat/lapjv.git
 
+# [ torch-rnn ]
+
+RUN git clone https://github.com/deepmind/torch-hdf5 ; \
+  cd torch-hdf5 ; \
+  luarocks make hdf5-0-0.rockspec ; \
+  cd .. ; \
+  rm -rf torch-hdf5
+
 RUN apt-get clean autoclean; apt-get autoremove -y; rm -rf /var/lib/apt/lists/*
