@@ -142,4 +142,10 @@ RUN git clone https://github.com/deepmind/torch-hdf5 ; \
   cd .. ; \
   rm -rf torch-hdf5
 
-RUN apt-get clean autoclean; apt-get autoremove -y; rm -rf /var/lib/apt/lists/*
+# [ neuraltalk2 ]
+
+RUN apt-get update; \
+  apt-get install -y \
+    libprotobuf-dev \
+    protobuf-compiler ;\
+  luarocks install loadcaffe
